@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constant.dart';
+
 class ColorDot extends StatelessWidget {
   final Color color;
   final VoidCallback press;

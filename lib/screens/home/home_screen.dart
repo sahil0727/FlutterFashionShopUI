@@ -1,18 +1,75 @@
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_fashion_shop_ui/constant.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../components/categories.dart';
-import '../../components/new_arrival.dart';
-import '../../components/popular.dart';
-import '../../components/search_form.dart';
+import '../explore_screen.dart';
 
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int selectIndex = 0;
+
+  static List<Widget> screens = [
+    const ExploreScreen(),
+    const Center(
+      child: Text("Favorite"),
+    ),
+    const Center(
+      child: Text("Cart"),
+    ),
+    const Center(
+      child: Text("My Profile"),
+    ),
+  ];
+
+  @override
   Widget build(BuildContext context) {
+    log('calling build method');
     return Scaffold(
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(left: 15, right: 15, bottom: 8),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: BottomNavigationBar(
+            backgroundColor: const Color(0xffe4e3e8),
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              setState(() {
+                selectIndex = index;
+              });
+            },
+            elevation: 0.0,
+            currentIndex: selectIndex,
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: 'Favorite',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.shopping_cart),
+                label: 'Cart',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Account',
+              ),
+            ],
+            selectedItemColor: Colors.black,
+            unselectedItemColor: const Color(0xffb5bcc2),
+            showSelectedLabels: true,
+            showUnselectedLabels: true,
+          ),
+        ),
+      ),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
@@ -36,40 +93,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.all(defaultPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Explore',
-              style: Theme.of(context).textTheme.headline4!.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-            ),
-            const Text(
-              'Best outfits for you',
-              style: TextStyle(fontSize: 18),
-            ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: defaultPadding),
-              child: SearchForm(),
-            ),
-            const Categories(),
-            const SizedBox(height: defaultPadding),
-            const NewArrival(),
-            const SizedBox(height: defaultPadding),
-            const Popular(),
-
-          ],
-        ),
-      ),
+      body: screens.elementAt(selectIndex),
     );
   }
 }
-
-
-
-

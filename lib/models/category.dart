@@ -6,7 +6,7 @@ class Category {
   });
 }
 
-List<Category> demo_Category = [
+List<Category> demoCategory = [
   Category(icon: 'assets/icons/dress.svg', title: 'Dress'),
   Category(icon: 'assets/icons/shirt.svg', title: 'Shirt'),
   Category(icon: 'assets/icons/pants.svg', title: 'Pants'),

@@ -7,17 +7,33 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'components/colors_dot.dart';
 
-class DetailsScreen extends StatefulWidget {
+class DetailsScreenNewArrival extends StatefulWidget {
   final Product product;
 
-  const DetailsScreen({Key? key, required this.product}) : super(key: key);
+  const DetailsScreenNewArrival({Key? key, required this.product})
+      : super(key: key);
 
   @override
-  State<DetailsScreen> createState() => _DetailsScreenState();
+  State<DetailsScreenNewArrival> createState() =>
+      _DetailsScreenNewArrivalState();
 }
 
-class _DetailsScreenState extends State<DetailsScreen> {
+class _DetailsScreenNewArrivalState extends State<DetailsScreenNewArrival> {
   late bool isLike = false;
+  List<Map<String, dynamic>> colorDotColor = [
+    {
+      'color': const Color(0xffbee8ea),
+      'isActive': false,
+    },
+    {
+      'color': const Color(0xff141b4a),
+      'isActive': false,
+    },
+    {
+      'color': const Color(0xfff4e5c3),
+      'isActive': false,
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +67,13 @@ class _DetailsScreenState extends State<DetailsScreen> {
       ),
       body: Column(
         children: <Widget>[
-          Image.asset(
-            widget.product.image,
-            height: MediaQuery.of(context).size.height * .45,
-            fit: BoxFit.fitWidth,
+          Hero(
+            tag: widget.product.image,
+            child: Image.asset(
+              widget.product.image,
+              height: MediaQuery.of(context).size.height * .45,
+              fit: BoxFit.fitWidth,
+            ),
           ),
           const SizedBox(height: defaultPadding),
           Expanded(
@@ -81,15 +100,21 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(
-                            widget.product.title,
-                            style: Theme.of(context).textTheme.headline6,
+                          child: Hero(
+                            tag: widget.product.title,
+                            child: Text(
+                              widget.product.title,
+                              style: Theme.of(context).textTheme.headline6,
+                            ),
                           ),
                         ),
                         const SizedBox(width: defaultPadding),
-                        Text(
-                          '\$${widget.product.price}',
-                          style: Theme.of(context).textTheme.headline6,
+                        Hero(
+                          tag: widget.product.price,
+                          child: Text(
+                            '\$${widget.product.price}',
+                            style: Theme.of(context).textTheme.headline6,
+                          ),
                         ),
                       ],
                     ),
@@ -109,21 +134,19 @@ class _DetailsScreenState extends State<DetailsScreen> {
                     ),
                     const SizedBox(height: defaultPadding / 2),
                     Row(
-                      children: [
-                        ColorDot(
-                          color: const Color(0xffbee8ea),
-                          press: () {},
+                      children: List.generate(
+                        colorDotColor.length,
+                        (index) => ColorDot(
+                          color: colorDotColor.elementAt(index)['color'],
+                          isActive: colorDotColor.elementAt(index)['isActive'],
+                          press: () {
+                            setState(() {
+                              colorDotColor.elementAt(index)['isActive'] =
+                                  !colorDotColor.elementAt(index)['isActive'];
+                            });
+                          },
                         ),
-                        ColorDot(
-                          color: const Color(0xff141b4a),
-                          isActive: true,
-                          press: () {},
-                        ),
-                        ColorDot(
-                          color: const Color(0xfff4e5c3),
-                          press: () {},
-                        ),
-                      ],
+                      ),
                     ),
                     const SizedBox(height: defaultPadding * 1.5),
                     Center(
@@ -150,5 +173,3 @@ class _DetailsScreenState extends State<DetailsScreen> {
     );
   }
 }
-
-
